@@ -21,19 +21,21 @@ public class Resilience4JConfig {
                 .build());
     }
 
-
     private CircuitBreakerConfig circuitBreakerConfig() {
         return CircuitBreakerConfig.custom()
                 .slidingWindowType(CircuitBreakerConfig.SlidingWindowType.COUNT_BASED)
                 .slidingWindowSize(100)
                 .failureRateThreshold(200)
                 .waitDurationInOpenState(Duration.ofMillis(3000))
+                .permittedNumberOfCallsInHalfOpenState(3)
+                .automaticTransitionFromOpenToHalfOpenEnabled(false)
                 .build();
     }
 
     private TimeLimiterConfig timeLimiterConfig() {
         return TimeLimiterConfig.custom()
                 .timeoutDuration(Duration.ofSeconds(10))
+                .cancelRunningFuture(false)
                 .build();
     }
 }
